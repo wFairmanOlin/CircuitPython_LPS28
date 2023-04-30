@@ -15,3 +15,12 @@ Example showing the Data rate setting
 .. literalinclude:: ../examples/lps28_data_rate.py
     :caption: examples/lps28_data_rate.py
     :linenos:
+
+Resolution settings
+--------------------
+
+Example showing the Resolution setting
+
+.. literalinclude:: ../examples/lps28_resolution.py
+    :caption: examples/lps28_resolution.py
+    :linenos:

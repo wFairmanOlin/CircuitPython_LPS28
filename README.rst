@@ -25,6 +25,9 @@ Introduction
 
 LPS28 pressure sensor drive for CircuitPython
 
+Disclaimer: probably not ready as I need to test with an actual Sensor.
+
+
 
 Dependencies
 =============
