@@ -24,3 +24,12 @@ Example showing the Resolution setting
 .. literalinclude:: ../examples/lps28_resolution.py
     :caption: examples/lps28_resolution.py
     :linenos:
+
+Temperature Example
+--------------------
+
+Example showing how to verify the temperature
+
+.. literalinclude:: ../examples/lps28_temperature.py
+    :caption: examples/lps28_temperature.py
+    :linenos:

@@ -16,7 +16,8 @@ LPS28 pressure sensor drive for CircuitPython
 from micropython import const
 from adafruit_bus_device import i2c_device
 from adafruit_register.i2c_struct import ROUnaryStruct, UnaryStruct
-from adafruit_register.i2c_bits import RWBits, ROBits, RWBit
+from adafruit_register.i2c_bits import RWBits, ROBits
+from adafruit_register.i2c_bit import RWBit
 
 try:
     from busio import I2C
@@ -140,6 +141,7 @@ class LPS28:
         if self._device_id != 0xB4:
             raise RuntimeError("Failed to find LPS28")
 
+        self._data_rate = RATE_10_HZ
         self._pressure_scale = 4096
 
     @property
