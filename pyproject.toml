@@ -10,7 +10,7 @@ requires = [
 ]
 
 [project]
-name = "lps28"
+name = "circuitpython-lps28"
 description = "LPS28 pressure sensor drive for CircuitPython"
 version = "0.0.0+auto.0"
 readme = "README.rst"
