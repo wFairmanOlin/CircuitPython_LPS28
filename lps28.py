@@ -30,7 +30,7 @@ __repo__ = "https://github.com/jposada202020/CircuitPython_LPS28.git"
 
 
 _REG_WHOAMI = const(0x0F)
-_INTERRUPT_CFG = const(0xB0)
+_INTERRUPT_CFG = const(0x0B)
 _CTRL_REG1 = const(0x10)
 _CTRL_REG2 = const(0x11)
 _INT_SOURCE = const(0x24)
