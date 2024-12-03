@@ -134,6 +134,7 @@ class LPS28:
     # Register CTRL_REG2 (0x11)
     # | BOOT | FS_MODE | LFPF_CFG | EN_LPFP | BDU | SWRESET | ---- | ONESHOOT|
     _full_scale = RWBits(1, _CTRL_REG2, 6)
+    _one_shot = RWBits(1, _CTRL_REG2, 0)
 
     def __init__(self, i2c_bus: I2C, address: int = 0x5D) -> None:
         self.i2c_device = i2c_device.I2CDevice(i2c_bus, address)
@@ -142,7 +143,7 @@ class LPS28:
             raise RuntimeError("Failed to find LPS28")
 
         self._data_rate = RATE_10_HZ
-        self._pressure_scale = 4096
+        self._resolution = RES_4
 
     @property
     def data_rate(self) -> str:
@@ -220,6 +221,7 @@ class LPS28:
             "RES_32",
             "RES_64",
             "RES_128",
+            "",
             "RES_512",
         )
         return values[self._resolution]
@@ -246,32 +248,57 @@ class LPS28:
 
         """
         values = ("NORMAL", "FULL_SCALE")
-        return values[self._resolution]
+        return values[self._full_scale]
 
     @full_scale.setter
     def full_scale(self, value: int) -> None:
         if value not in full_scale_values:
             raise ValueError("Value must be a valid scale setting")
-        options = (4096, 2048)
-
-        self._full_scale = options[value]
+        self._full_scale = value
 
     @property
     def pressure(self) -> float:
         """
         Pressure value in hPa
         """
+        if self._data_rate == ONE_SHOT:
+            self._one_shot = 0b1
+            #wait for one shot sample to finish
+            while self._one_shot == 0b1:
+                pass
 
+        pressure_scale = 4096 if self._full_scale == 0 else 2048
         pressure_reading = self._raw_pressure
-        raw_pressure = self._twos_comp(pressure_reading, 24) / self._pressure_scale
+        pressure = self._twos_comp(pressure_reading, 24) / pressure_scale
 
-        return raw_pressure / 100
+        return pressure
 
     @property
     def temperature(self) -> float:
         """The current temperature measurement in Celsius"""
+        if self._data_rate == ONE_SHOT:
+            self._one_shot = 0b1
+            #wait for one shot sample to finish
+            while self._one_shot == 0b1:
+                pass
 
         return self._raw_temperature / 100
+
+    @property
+    def pressure_temperature(self) -> Tuple[float, float]:
+        if self._data_rate == ONE_SHOT:
+            self._one_shot = 0b1
+            #wait for one shot sample to finish
+            while self._one_shot == 0b1:
+                pass
+
+        pressure_scale = 4096 if self._full_scale == 0 else 2048
+        pressure_reading = self._raw_pressure
+        pressure = self._twos_comp(pressure_reading, 24) / pressure_scale
+        temperature = self._raw_temperature / 100
+
+        return pressure, temperature
+
 
     @property
     def high_threshold_enabled(self) -> bool:
